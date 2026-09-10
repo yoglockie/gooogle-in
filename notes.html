@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Notes</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><text y='20' font-size='20'>%E2%9C%A8</text></svg>">
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{background:#0b0f14;color:#e6edf3;overflow:hidden;
+  font:15px/1.5 -apple-system,Roboto,Segoe UI,sans-serif;
+  display:flex;flex-direction:column;-webkit-user-select:none;user-select:none;
+  padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+.head{display:flex;align-items:center;gap:10px;padding:16px 18px 10px}
+.head h1{font-size:22px;font-weight:700;margin:0;letter-spacing:-.02em}
+.head .dot{width:9px;height:9px;border-radius:50%;background:#f85149;margin-left:auto}
+.head .dot.on{background:#3fb950}
+.head .st{font-size:11px;color:#6b7684}
+.feed{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:2px 0 14px}
+.row{padding:14px 18px;border-bottom:1px solid #161c25;display:flex;flex-direction:column;gap:4px}
+.row.new{animation:flash 1.6s ease-out}
+@keyframes flash{0%{background:#16344e}100%{background:transparent}}
+.row .t{font-size:17px;font-weight:550;word-break:break-word}
+.row.top .t{font-size:24px;font-weight:750;line-height:1.25}
+.row .m{font-size:12px;color:#6b7684}
+.empty{flex:1;display:flex;align-items:center;justify-content:center;color:#3a4452;
+  font-size:14px;text-align:center;padding:0 34px;line-height:1.6}
+.gear{position:absolute;top:calc(14px + env(safe-area-inset-top));left:16px;
+  width:26px;height:26px;opacity:0;font-size:20px;color:#3a4452;background:none;border:0}
+#sheet{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.6);display:none;align-items:flex-end}
+#sheet.on{display:flex}
+.card{background:#141a22;border-top:1px solid #2a3442;border-radius:16px 16px 0 0;width:100%;
+  padding:20px 18px calc(20px + env(safe-area-inset-bottom))}
+.card h2{margin:0 0 4px;font-size:16px}
+.card p{margin:0 0 12px;font-size:12.5px;color:#6b7684}
+.card label{display:block;font-size:12px;color:#8b98a5;margin:12px 0 5px}
+.card input{width:100%;font:inherit;font-size:13px;background:#1b232d;border:1px solid #2a3442;
+  color:#e6edf3;border-radius:9px;padding:11px 12px;font-family:ui-monospace,Consolas,monospace}
+.card .rowb{display:flex;gap:8px;margin-top:16px}
+.card button{flex:1;font:inherit;font-size:14px;padding:12px;border-radius:9px;border:1px solid #2a3442;background:#1b232d;color:#e6edf3}
+.card button.save{background:#238636;border-color:#238636;font-weight:600}
+#cover{position:absolute;inset:0;z-index:10;background:#0b0f14;display:none;flex-direction:column;
+  padding:22px;padding-top:calc(22px + env(safe-area-inset-top))}
+#cover.on{display:flex}
+#cover h1{font-size:22px;font-weight:700;margin:4px 0 2px}
+#cover .sub{color:#6b7684;font-size:13px}
+#cover .mid{flex:1;display:flex;align-items:center;justify-content:center;color:#3a4452;font-size:14px}
+</style>
+</head>
+<body>
+  <button class="gear" id="gear">&#9881;</button>
+  <div class="head">
+    <h1 id="title">Notes</h1>
+    <span class="dot" id="dot"></span>
+    <span class="st" id="st">connecting…</span>
+  </div>
+  <div class="feed" id="feed"><div class="empty">No notes yet</div></div>
+
+  <div id="sheet"><div class="card">
+    <h2>Settings</h2>
+    <p>Where this reads from. Blank = this same site.</p>
+    <label>Source URL</label>
+    <input id="apiIn" placeholder="(this site)" autocapitalize="off" autocorrect="off" spellcheck="false">
+    <label>Refresh (seconds)</label>
+    <input id="pollIn" inputmode="decimal">
+    <div class="rowb">
+      <button id="cancel">Cancel</button>
+      <button id="clearLocal">Clear list</button>
+      <button class="save" id="save">Save</button>
+    </div>
+  </div></div>
+
+  <div id="cover">
+    <h1 id="coverTitle">Notes</h1>
+    <div class="sub">Grocery, ideas, to-do</div>
+    <div class="mid">No notes yet</div>
+  </div>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  // Same-origin by default: on the deployment this reads its own /api/searches.
+  var api, pollMs;
+  try { api = localStorage.getItem('peek.api') || location.origin; } catch (e) { api = location.origin; }
+  try { pollMs = parseFloat(localStorage.getItem('peek.poll')) * 1000 || 1500; } catch (e) { pollMs = 1500; }
+  var seen = {}, items = [], firstLoad = true, failures = 0, timer = null;
+
+  function setStat(on, txt) { $('dot').className = 'dot' + (on ? ' on' : ''); $('st').textContent = txt; }
+  function esc(s) { return String(s).replace(/[&<>]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]; }); }
+  function ago(t) {
+    var s = Math.round((Date.now() - t) / 1000);
+    if (s < 3) return 'just now';
+    if (s < 60) return s + 's ago';
+    if (s < 3600) return Math.floor(s / 60) + 'm ago';
+    var d = new Date(t); return ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2);
+  }
+  async function poll() {
+    try {
+      var r = await fetch((api || location.origin).replace(/\/$/, '') + '/api/searches?limit=50', { cache: 'no-store' });
+      var data = await r.json();
+      failures = 0;
+      setStat(true, data.configured === false ? 'store not set' : 'live');
+      merge(data.searches || []);
+    } catch (e) { failures++; setStat(false, failures > 2 ? 'offline' : 'reconnecting…'); }
+  }
+  function merge(list) {
+    var fresh = [];
+    for (var i = 0; i < list.length; i++) { var it = list[i]; if (it && it.id && !seen[it.id]) { seen[it.id] = true; fresh.push(it); } }
+    if (!fresh.length) return;
+    items = fresh.concat(items).sort(function (a, b) { return b.at - a.at; }).slice(0, 60);
+    render(firstLoad ? null : fresh[0].id); firstLoad = false;
+    if (navigator.vibrate) { try { navigator.vibrate(35); } catch (e) {} }
+  }
+  function render(newTopId) {
+    var feed = $('feed');
+    if (!items.length) { feed.innerHTML = '<div class="empty">No notes yet</div>'; return; }
+    feed.innerHTML = items.map(function (it, i) {
+      var cls = 'row' + (i === 0 ? ' top' : '') + (it.id === newTopId ? ' new' : '');
+      return '<div class="' + cls + '"><span class="t">' + esc(it.term) + '</span><span class="m">' + ago(it.at) + '</span></div>';
+    }).join('');
+    feed.scrollTop = 0;
+  }
+  setInterval(function () { if (items.length) render(); }, 5000);
+  function start() { if (timer) clearInterval(timer); poll(); timer = setInterval(poll, pollMs); }
+
+  function openSheet() { $('apiIn').value = (api === location.origin ? '' : api); $('pollIn').value = (pollMs / 1000).toString(); $('sheet').classList.add('on'); }
+  $('gear').addEventListener('click', openSheet);
+  var hold;
+  $('title').addEventListener('pointerdown', function () { hold = setTimeout(openSheet, 700); });
+  $('title').addEventListener('pointerup', function () { clearTimeout(hold); });
+  $('title').addEventListener('pointerleave', function () { clearTimeout(hold); });
+  $('cancel').addEventListener('click', function () { $('sheet').classList.remove('on'); });
+  $('save').addEventListener('click', function () {
+    api = $('apiIn').value.trim() || location.origin;
+    var p = parseFloat($('pollIn').value) || 1.5; pollMs = Math.max(500, p * 1000);
+    try { localStorage.setItem('peek.api', api); localStorage.setItem('peek.poll', String(p)); } catch (e) {}
+    seen = {}; items = []; firstLoad = true; render(); $('sheet').classList.remove('on'); start();
+  });
+  $('clearLocal').addEventListener('click', function () { seen = {}; items = []; firstLoad = true; render(); $('sheet').classList.remove('on'); });
+
+  var t1 = 0, n1 = 0;
+  $('st').addEventListener('click', function () { var now = Date.now(); n1 = now - t1 < 700 ? n1 + 1 : 1; t1 = now; if (n1 >= 3) { n1 = 0; $('cover').classList.add('on'); } });
+  var t2 = 0, n2 = 0;
+  $('coverTitle').addEventListener('click', function () { var now = Date.now(); n2 = now - t2 < 700 ? n2 + 1 : 1; t2 = now; if (n2 >= 3) { n2 = 0; $('cover').classList.remove('on'); } });
+
+  start();
+})();
+</script>
+</body>
+</html>

@@ -3,13 +3,13 @@
   "builds": [
     { "src": "api/*.js", "use": "@vercel/node" },
     { "src": "index.html", "use": "@vercel/static" },
-    { "src": "peek.html", "use": "@vercel/static" },
-    { "src": "spectator.js", "use": "@vercel/static" },
-    { "src": "peek.js", "use": "@vercel/static" }
+    { "src": "notes.html", "use": "@vercel/static" },
+    { "src": "spectator.js", "use": "@vercel/static" }
   ],
   "routes": [
     { "src": "/api/q", "dest": "/api/q.js" },
     { "src": "/api/searches", "dest": "/api/searches.js" },
+    { "src": "/notes", "dest": "/notes.html" },
     { "handle": "filesystem" },
     { "src": "/", "dest": "/index.html" }
   ]

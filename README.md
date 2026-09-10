@@ -47,7 +47,7 @@ npm run start:atlas       # = node --env-file=.env server.js
 Either way:
 
 - Spectator: http://localhost:8787/
-- Magician (browser preview of the app): http://localhost:8787/peek.html
+- Magician (browser preview of the app): http://localhost:8787/notes
 
 Search on the spectator tab → it appears on the peek tab within ~1.5s, newest at
 top, then the spectator tab forwards to real Google. With `start:atlas`, the term
@@ -57,14 +57,17 @@ is really written to and read from your Atlas cluster.
 
 ```
 index.html + spectator.js   the Google clone (served at /)
-peek.html  + peek.js         the magician view; this is what becomes the APK
+notes.html                   hidden web peek, self-contained, served at /notes
 server.js                    LOCAL dev server, in-memory, zero deps
 api/_store.js                MongoDB Atlas (driver, server-side only)
 api/q.js                     POST /api/q     save a search
 api/searches.js              GET  /api/searches   poll, newest first
-vercel.json                  CORS + clean URLs
+vercel.json                  builds + routes (static pages + functions + /notes)
 test.js                      end-to-end API checks
 ```
+
+The performer's main view is the separate APK in `../02-search-peek-app/`.
+`/notes` is a hidden web fallback on the site itself — not linked anywhere.
 
 ## Deploy the spectator page + API to Vercel
 
@@ -100,7 +103,7 @@ call — it's your deploy.
 
 ## The magician app
 
-For now, `peek.html` in a browser IS the magician view — point it at your deploy
+For now, `notes.html` in a browser IS the magician view — point it at your deploy
 with the **Set** box (paste `https://<your-project>.vercel.app`), and it polls
 there. The APK is the next step: wrap this same page with Capacitor (like Trick
 1) so it lives as a "Notes" app on your phone with the URL baked in.
@@ -113,5 +116,6 @@ Notepad clone in Trick 1. It does not read anything off their real phone.
 
 ## Status
 
-Local end-to-end working, 9/9 tests. Vercel + MongoDB Atlas code written, not yet
-deployed. APK not built yet — web-first, as planned.
+Deployed and working end to end at `https://gooogle-co.vercel.app` (MongoDB
+Atlas). Hidden web peek at `/notes`. The magician APK lives in
+`../02-search-peek-app/`. 9/9 local tests pass.
