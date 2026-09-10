@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Google</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><text y='20' font-size='20'>%F0%9F%94%8D</text></svg>">
+<link rel="preconnect" href="https://fonts.cdnfonts.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.cdnfonts.com/css/product-sans">
 <style>
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
@@ -21,9 +23,12 @@ body{display:flex;flex-direction:column;min-height:100%;
   display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px}
 .mid{flex:1;display:flex;flex-direction:column;align-items:center;
   justify-content:flex-start;padding-top:min(18vh,150px)}
-.logo{font:400 92px/1 'Product Sans','Segoe UI',Arial,sans-serif;letter-spacing:-5px;margin-bottom:26px}
-.logo .b{color:#4285f4}.logo .r{color:#ea4335}.logo .y{color:#fbbc05}.logo .g{color:#34a853}
-@media(max-width:520px){.logo{font-size:64px;letter-spacing:-3px;margin-bottom:20px}}
+/* Google's real logo font is Product Sans (loaded above). Single colour, no
+   rainbow - falls back to geometric sans faces that ship on most machines. */
+.logo{font:400 92px/1 'Product Sans','Google Sans',Futura,'Century Gothic','Trebuchet MS',Arial,sans-serif;
+  letter-spacing:-2px;margin-bottom:26px;color:#5f6368}
+@media(prefers-color-scheme:dark){.logo{color:#e8eaed}}
+@media(max-width:520px){.logo{font-size:64px;letter-spacing:-1px;margin-bottom:20px}}
 form{width:min(584px,92vw)}
 .box{display:flex;align-items:center;gap:13px;border:1px solid #dfe1e5;border-radius:24px;
   padding:11px 16px;background:#fff}
@@ -59,9 +64,7 @@ footer .links .sp{flex:1}
   </div>
 
   <div class="mid">
-    <div class="logo">
-      <span class="b">G</span><span class="r">o</span><span class="y">o</span><span class="b">g</span><span class="g">l</span><span class="r">e</span>
-    </div>
+    <div class="logo">Google</div>
     <form id="f" autocomplete="off">
       <div class="box">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="#9aa0a6"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 10-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14z"/></svg>
