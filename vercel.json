@@ -1,13 +1,16 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "cleanUrls": true,
-  "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Cache-Control", "value": "no-store" }
-      ]
-    }
+  "version": 2,
+  "builds": [
+    { "src": "api/*.js", "use": "@vercel/node" },
+    { "src": "index.html", "use": "@vercel/static" },
+    { "src": "peek.html", "use": "@vercel/static" },
+    { "src": "spectator.js", "use": "@vercel/static" },
+    { "src": "peek.js", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/api/q", "dest": "/api/q.js" },
+    { "src": "/api/searches", "dest": "/api/searches.js" },
+    { "handle": "filesystem" },
+    { "src": "/", "dest": "/index.html" }
   ]
 }
