@@ -13,8 +13,17 @@
   var form = document.getElementById('f');
   var input = document.getElementById('q');
 
-  var acct = params.get('acct');
-  if (acct) document.getElementById('acct').textContent = acct.slice(0, 1).toUpperCase();
+  // Account popup - looks like the real Google account switcher.
+  var acctBtn = document.getElementById('acctBtn');
+  var acctMenu = document.getElementById('acctMenu');
+  var acctX = document.getElementById('acctX');
+  if (acctBtn && acctMenu) {
+    acctBtn.addEventListener('click', function (e) { e.stopPropagation(); acctMenu.classList.toggle('on'); });
+    if (acctX) acctX.addEventListener('click', function (e) { e.stopPropagation(); acctMenu.classList.remove('on'); });
+    document.addEventListener('click', function (e) {
+      if (!acctMenu.contains(e.target) && e.target !== acctBtn) acctMenu.classList.remove('on');
+    });
+  }
 
   function relayTerm(term) {
     var url = api + '/api/q';

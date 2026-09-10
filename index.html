@@ -18,9 +18,49 @@ body{display:flex;flex-direction:column;min-height:100%;
 .top a{color:#5f6368;text-decoration:none}
 @media(prefers-color-scheme:dark){.top a{color:#e8eaed}}
 .top .dots{width:24px;height:24px;opacity:.75}
-.top .acct{width:30px;height:30px;border-radius:50%;
-  background:linear-gradient(135deg,#4285f4,#a142f4);color:#fff;
-  display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px}
+/* realistic Google account avatar + popup */
+.acct-wrap{position:relative;display:flex}
+.acct-btn{width:32px;height:32px;border-radius:50%;border:0;cursor:pointer;padding:0;
+  background:#9334e6;color:#fff;font:600 15px/1 'Product Sans',Arial,sans-serif;
+  display:flex;align-items:center;justify-content:center}
+.acct-btn:hover{box-shadow:0 0 0 7px rgba(60,64,67,.08)}
+.acct-menu{position:absolute;top:46px;right:-4px;width:min(360px,92vw);z-index:60;
+  background:#e9eef6;color:#202124;border-radius:26px;box-shadow:0 2px 22px rgba(0,0,0,.26);
+  display:none;overflow:hidden;text-align:center;font-size:14px}
+.acct-menu.on{display:block}
+.am-top{padding:12px 20px 16px;position:relative}
+.am-email{font-size:14px;color:#3c4043;margin:2px 0 12px}
+.am-x{position:absolute;top:6px;right:8px;border:0;background:none;cursor:pointer;
+  width:36px;height:36px;border-radius:50%;font-size:22px;line-height:1;color:#5f6368}
+.am-x:hover{background:rgba(60,64,67,.08)}
+.am-avatar{width:32px;height:32px;border-radius:50%;color:#fff;display:flex;
+  align-items:center;justify-content:center;font:600 15px/1 'Product Sans',Arial,sans-serif;flex:none}
+.am-big{width:72px;height:72px;font-size:33px;margin:0 auto 8px}
+.am-hi{font-size:22px;font-weight:400;margin-bottom:14px}
+.am-manage{display:inline-block;border:1px solid #dadce0;border-radius:20px;
+  padding:8px 22px;font-size:14px;color:#3c4043;text-decoration:none;background:#fff}
+.am-manage:hover{background:#f8faff}
+.am-list{background:#fff;margin:4px 8px 0;border-radius:12px;text-align:left;overflow:hidden}
+.am-row,.am-action{display:flex;align-items:center;gap:16px;padding:12px 20px;cursor:pointer}
+.am-row:hover,.am-action:hover{background:#f5f5f5}
+.am-name{font-size:14px;color:#202124}
+.am-sub{font-size:12px;color:#5f6368}
+.am-ic{width:32px;height:32px;border-radius:50%;background:#e8eaed;color:#5f6368;
+  display:flex;align-items:center;justify-content:center;font-size:18px;flex:none}
+.am-foot{padding:14px;font-size:12px;color:#5f6368}
+.am-foot span{margin:0 6px;cursor:pointer}
+@media(prefers-color-scheme:dark){
+  .acct-menu{background:#1f2023;color:#e8eaed}
+  .am-email{color:#bdc1c6}
+  .am-x{color:#9aa0a6}.am-x:hover{background:rgba(255,255,255,.1)}
+  .am-manage{background:#2d2e30;border-color:#5f6368;color:#e8eaed}
+  .am-manage:hover{background:#35363a}
+  .am-list{background:#2d2e30}
+  .am-row:hover,.am-action:hover{background:#35363a}
+  .am-name{color:#e8eaed}.am-sub{color:#9aa0a6}
+  .am-ic{background:#3c4043;color:#9aa0a6}
+  .am-foot{color:#9aa0a6}
+}
 .mid{flex:1;display:flex;flex-direction:column;align-items:center;
   justify-content:flex-start;padding-top:min(18vh,150px)}
 /* Google's real logo font is Product Sans (loaded above). Single colour, no
@@ -60,7 +100,27 @@ footer .links .sp{flex:1}
     <span class="sp"></span>
     <a href="#">Gmail</a><a href="#">Images</a>
     <svg class="dots" viewBox="0 0 24 24" fill="#5f6368"><path d="M6 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6-8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6-8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-    <div class="acct" id="acct">G</div>
+    <div class="acct-wrap">
+      <button class="acct-btn" id="acctBtn" aria-label="Google Account: Lokesh Yogi (cor.lokesh@gmail.com)">L</button>
+      <div class="acct-menu" id="acctMenu">
+        <div class="am-top">
+          <button class="am-x" id="acctX" aria-label="Close">&times;</button>
+          <div class="am-email">cor.lokesh@gmail.com</div>
+          <div class="am-avatar am-big" style="background:#9334e6">L</div>
+          <div class="am-hi">Hi, Lokesh!</div>
+          <a class="am-manage" href="#">Manage your Google Account</a>
+        </div>
+        <div class="am-list">
+          <div class="am-row">
+            <div class="am-avatar" style="background:#1e8e3e">LY</div>
+            <div><div class="am-name">Lokesh Yogi</div><div class="am-sub">yogilokesh916@gmail.com</div></div>
+          </div>
+          <div class="am-action"><span class="am-ic">+</span><span>Add another account</span></div>
+          <div class="am-action"><span class="am-ic">&#9099;</span><span>Sign out of all accounts</span></div>
+        </div>
+        <div class="am-foot"><span>Privacy Policy</span>&bull;<span>Terms of Service</span></div>
+      </div>
+    </div>
   </div>
 
   <div class="mid">
