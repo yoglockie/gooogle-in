@@ -23,7 +23,17 @@ let _indexed = false;
 function client() {
   // reuse across warm invocations
   if (!global.__searchpeekMongo) {
-    global.__searchpeekMongo = new MongoClient(URI, { maxPoolSize: 5 }).connect();
+    // Do NOT cache a rejected promise. In serverless, a first connect that fails
+    // (e.g. during an Atlas network-rule propagation window) would otherwise be
+    // cached and poison every later call on the same warm instance. On failure
+    // we clear the cache so the next invocation reconnects fresh.
+    global.__searchpeekMongo = new MongoClient(URI, {
+      maxPoolSize: 5,
+      serverSelectionTimeoutMS: 8000
+    }).connect().catch(err => {
+      global.__searchpeekMongo = undefined;
+      throw err;
+    });
   }
   return global.__searchpeekMongo;
 }
