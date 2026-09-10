@@ -1,0 +1,14 @@
+{
+  "name": "search-peek",
+  "private": true,
+  "version": "1.0.0",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test.js",
+    "start:atlas": "node --env-file=.env server.js"
+  },
+  "dependencies": {
+    "mongodb": "^6.12.0"
+  }
+}

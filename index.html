@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Google</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><text y='20' font-size='20'>%F0%9F%94%8D</text></svg>">
+<style>
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{display:flex;flex-direction:column;min-height:100%;
+  font:14px/1.4 Arial,-apple-system,Roboto,sans-serif;color:#202124;background:#fff}
+@media(prefers-color-scheme:dark){body{background:#202124;color:#e8eaed}}
+.top{display:flex;align-items:center;gap:20px;padding:15px 20px;font-size:13px}
+.top .sp{flex:1}
+.top a{color:#5f6368;text-decoration:none}
+@media(prefers-color-scheme:dark){.top a{color:#e8eaed}}
+.top .dots{width:24px;height:24px;opacity:.75}
+.top .acct{width:30px;height:30px;border-radius:50%;
+  background:linear-gradient(135deg,#4285f4,#a142f4);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-weight:600;font-size:13px}
+.mid{flex:1;display:flex;flex-direction:column;align-items:center;
+  justify-content:flex-start;padding-top:min(18vh,150px)}
+.logo{font:400 92px/1 'Product Sans','Segoe UI',Arial,sans-serif;letter-spacing:-5px;margin-bottom:26px}
+.logo .b{color:#4285f4}.logo .r{color:#ea4335}.logo .y{color:#fbbc05}.logo .g{color:#34a853}
+@media(max-width:520px){.logo{font-size:64px;letter-spacing:-3px;margin-bottom:20px}}
+form{width:min(584px,92vw)}
+.box{display:flex;align-items:center;gap:13px;border:1px solid #dfe1e5;border-radius:24px;
+  padding:11px 16px;background:#fff}
+.box:hover,.box:focus-within{box-shadow:0 1px 6px rgba(32,33,36,.28);border-color:rgba(223,225,229,0)}
+@media(prefers-color-scheme:dark){.box{background:#303134;border-color:#5f6368}}
+.box svg{flex:none}
+.box input{flex:1;border:0;outline:0;font-size:16px;background:transparent;color:inherit}
+.box .mic{cursor:pointer}
+.btns{display:flex;gap:11px;justify-content:center;margin-top:28px}
+.btns button{font:inherit;font-size:14px;color:#3c4043;background:#f8f9fa;border:1px solid #f8f9fa;
+  border-radius:4px;padding:0 16px;height:36px;cursor:pointer}
+.btns button:hover{box-shadow:0 1px 1px rgba(0,0,0,.1);border-color:#dadce0;color:#202124}
+@media(prefers-color-scheme:dark){.btns button{color:#e8eaed;background:#303134;border-color:#303134}}
+.lang{margin-top:30px;color:#4d5156;font-size:13px}
+.lang a{color:#1a0dab;text-decoration:none}
+@media(prefers-color-scheme:dark){.lang{color:#9aa0a6}.lang a{color:#8ab4f8}}
+footer{background:#f2f2f2;color:#70757a;font-size:14px}
+@media(prefers-color-scheme:dark){footer{background:#171717;color:#9aa0a6}}
+footer .country{padding:15px 30px;border-bottom:1px solid #dadce0}
+@media(prefers-color-scheme:dark){footer .country{border-color:#3c4043}}
+footer .links{display:flex;flex-wrap:wrap;padding:0 15px}
+footer .links a{color:#70757a;text-decoration:none;padding:15px}
+footer .links .sp{flex:1}
+</style>
+</head>
+<body>
+  <div class="top">
+    <a href="#">About</a><a href="#">Store</a>
+    <span class="sp"></span>
+    <a href="#">Gmail</a><a href="#">Images</a>
+    <svg class="dots" viewBox="0 0 24 24" fill="#5f6368"><path d="M6 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6-8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6-8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+    <div class="acct" id="acct">G</div>
+  </div>
+
+  <div class="mid">
+    <div class="logo">
+      <span class="b">G</span><span class="r">o</span><span class="y">o</span><span class="b">g</span><span class="g">l</span><span class="r">e</span>
+    </div>
+    <form id="f" autocomplete="off">
+      <div class="box">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#9aa0a6"><path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 10-.7.7l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0A4.5 4.5 0 1114 9.5 4.5 4.5 0 019.5 14z"/></svg>
+        <input id="q" name="q" autofocus aria-label="Search"
+               enterkeyhint="search" autocapitalize="off" autocorrect="off" spellcheck="false">
+        <svg class="mic" width="24" height="24" viewBox="0 0 24 24">
+          <path fill="#4285f4" d="M12 15a3 3 0 003-3V6a3 3 0 00-6 0v6a3 3 0 003 3z"/>
+          <path fill="#34a853" d="M11 18.08h2V21h-2z"/>
+          <path fill="#fbbc05" d="M7.05 16.87A5.94 5.94 0 016 12.9H4a8 8 0 001.62 4.9z"/>
+          <path fill="#ea4335" d="M12 16.9a4 4 0 004-4h2a6 6 0 01-6 6z"/>
+          <path fill="#4285f4" d="M18 12.9a6 6 0 01-6 6v-1.9a4 4 0 004-4z"/>
+        </svg>
+      </div>
+      <div class="btns">
+        <button type="submit">Google Search</button>
+        <button type="button" id="lucky">I'm Feeling Lucky</button>
+      </div>
+    </form>
+    <div class="lang">Google offered in: <a href="#">हिन्दी</a> <a href="#">বাংলা</a> <a href="#">తెలుగు</a> <a href="#">मराठी</a> <a href="#">தமிழ்</a></div>
+  </div>
+
+  <footer>
+    <div class="country">India</div>
+    <div class="links">
+      <a href="#">Advertising</a><a href="#">Business</a><a href="#">How Search works</a>
+      <span class="sp"></span>
+      <a href="#">Privacy</a><a href="#">Terms</a><a href="#">Settings</a>
+    </div>
+  </footer>
+
+<script src="spectator.js"></script>
+</body>
+</html>

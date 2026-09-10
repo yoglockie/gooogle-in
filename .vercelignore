@@ -1,0 +1,6 @@
+# dev-only files - the deploy doesn't need these
+server.js
+test.js
+.env
+.env.*
+node_modules
